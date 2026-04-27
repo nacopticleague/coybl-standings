@@ -7,7 +7,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;}
+body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;display:flex;flex-direction:column;}
 
 /* ── Header ── */
 .header{background:#7d1a1a;padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden;}
@@ -25,7 +25,7 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
 .fg select:disabled{opacity:.5;cursor:not-allowed;}
 
 /* ── Main ── */
-.main{max-width:700px;margin:0 auto;padding:20px 14px 40px;}
+.main{max-width:700px;margin:0 auto;padding:20px 14px 40px;flex:1;width:100%;}
 
 /* ── Division block ── */
 .div-block{margin-bottom:28px;}
@@ -61,7 +61,7 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
 .diff-neg{color:#a22 !important;font-weight:600 !important;}
 
 /* ── Footnote ── */
-.footnote{margin-top:14px;padding:12px 16px;font-size:.68rem;color:#777;line-height:1.7;}
+.footnote{max-width:700px;margin:0 auto;padding:12px 16px;font-size:.68rem;color:#777;line-height:1.7;width:100%;}
 .footnote span{color:#5c1010;font-weight:700;}
 
 @media(max-width:520px){
@@ -97,6 +97,12 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
 </div>
 
 <div class="main"><div id="out"></div></div>
+
+<div class="footnote">
+  <div><span>W</span> Wins <span>L</span> Losses <span>T</span> Ties <span>PTS</span> Points <span>PF</span> Points For <span>PA</span> Points Against <span>PD</span> Point Differential</div>
+  <div style="margin-top:6px;"><span>Points:</span> Win = 2 · Tie = 0 · Loss = 0</div>
+  <div><span>Tiebreakers:</span> Win Pct → Games Won → PD → PF → PA → Games Lost</div>
+</div>
 
 
 
@@ -303,13 +309,6 @@ function render(){
 
     h+='</tbody></table></div>';
   });
-
-  /* Footnote — Abbreviations & Rules */
-  h+='<div class="footnote">';
-  h+='<div class="fn-row"><span>W</span> Wins <span>L</span> Losses <span>T</span> Ties <span>PTS</span> Points <span>PF</span> Points For <span>PA</span> Points Against <span>PD</span> Point Differential</div>';
-  h+='<div class="fn-row" style="margin-top:6px;"><span>Points:</span> Win = 2 · Tie = 0 · Loss = 0</div>';
-  h+='<div class="fn-row"><span>Tiebreakers:</span> Win Pct → Games Won → PD → PF → PA → Games Lost</div>';
-  h+='</div>';
 
   out.innerHTML=h;
 }
