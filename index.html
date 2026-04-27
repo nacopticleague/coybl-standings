@@ -331,6 +331,15 @@ function render(){
 }
 
 render();
+
+/* ── Iframe auto-resize (cross-origin safe) ── */
+function broadcastHeight(){
+  var h=document.body.scrollHeight;
+  window.parent.postMessage({type:'resize',height:h},'*');
+}
+window.addEventListener('load',broadcastHeight);
+new MutationObserver(broadcastHeight).observe(document.body,{childList:true,subtree:true});
+setInterval(broadcastHeight,500);
 </script>
 </body>
 </html>
