@@ -35,7 +35,7 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
 .div-line{flex:1;height:1px;background:#b8a492;}
 
 /* ── Table ── */
-.standings-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(80,20,20,.08);overflow:hidden;}
+.standings-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(80,20,20,.08);overflow:hidden;border:1px solid #eee4dc;}
 .standings-table thead th{font-size:.65rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.08em;padding:11px 8px 9px;background:#f0e6dd;border-bottom:2px solid #d8c8ba;text-align:center;white-space:nowrap;}
 .standings-table thead th:first-child{text-align:left;padding-left:14px;width:30px;}
 .standings-table thead th:nth-child(2){text-align:left;padding-left:0;}
@@ -91,7 +91,7 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
     <div class="fg">
       <label>Division</label>
       <select id="fdiv" onchange="render()">
-        <option value="JHS">Junior High (JHS)</option>
+        <option value="JHS">Junior High School (JHS)</option>
         <option value="Girls">Girls</option>
         <option value="HS-NY">High School — NY</option>
         <option value="HS-NJ">High School — NJ</option>
@@ -169,7 +169,7 @@ var TEAMS={
   "Mens":["Bayonne 1 (SASA)","EB","Hatfield","Holmdel","Long Island","SI1","SI2","Summit","Queens"]
 };
 
-var DIV_LABELS={"HS-NY":"High School · NY","HS-NJ":"High School · NJ","JHS":"Junior High","Girls":"Girls","College":"College","Mens":"Mens"};
+var DIV_LABELS={"HS-NY":"High School · NY","HS-NJ":"High School · NJ","JHS":"Junior High School","Girls":"Girls","College":"College","Mens":"Mens"};
 var DIV_ORDER=["JHS","Girls","HS-NY","HS-NJ","College","Mens"];
 
 /* Points awarded */
