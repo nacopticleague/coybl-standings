@@ -3,138 +3,332 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NA Coptic League 2026 Standings</title>
+<title>2026 NA Coptic League — Regular Season Standings</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; background: #c9b5a5; min-height: 100vh; }
-.header { background: #7d1a1a; padding: 16px 20px 0; text-align: center; }
-.header .sub { font-size: 0.65rem; color: #e07878; letter-spacing: 0.18em; text-transform: uppercase; }
-.header h1 { font-family: Georgia, serif; font-size: 1.3rem; color: #fff; font-weight: 700; margin-bottom: 14px; }
-.tabs { display: flex; gap: 2px; justify-content: center; flex-wrap: wrap; }
-.tab { padding: 8px 14px; border: none; cursor: pointer; font-weight: 700; font-size: 0.76rem;
-  background: transparent; color: #e07878; border-radius: 6px 6px 0 0; white-space: nowrap; }
-.tab.active { background: #fff; color: #7d1a1a; }
-.main { max-width: 700px; margin: 0 auto; padding: 20px 14px 48px; }
-.card { background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(80,20,20,.13); overflow: hidden; }
-.card-head { background: #7d1a1a; padding: 11px 16px; display: flex; align-items: center; justify-content: space-between; }
-.card-head span { color: #fff; font-family: Georgia, serif; font-weight: 700; font-size: 0.95rem; }
-.card-head small { color: #e07878; font-size: 0.68rem; letter-spacing: 0.1em; }
-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
-thead tr { background: #f5ede6; border-bottom: 2px solid #c9b5a5; }
-th { padding: 9px 10px; text-align: center; color: #5c1010; font-weight: 700; font-size: 0.68rem;
-  letter-spacing: 0.09em; text-transform: uppercase; min-width: 38px; }
-th:first-child { text-align: left; padding-left: 14px; min-width: 160px; }
-td { padding: 10px 10px; text-align: center; color: #222; border-bottom: 1px solid #ede0d8; }
-td:first-child { text-align: left; padding-left: 14px; font-weight: 700; white-space: nowrap; }
-tr:nth-child(even) td { background: #faf4ef; }
-.rank { display: inline-flex; align-items: center; justify-content: center;
-  width: 20px; height: 20px; border-radius: 50%; border: 2px solid #7d1a1a;
-  color: #7d1a1a; font-size: 0.65rem; font-weight: 800; margin-right: 8px; }
-.pts { color: #7d1a1a; font-weight: 800; }
-.pd-pos { color: #1a7d2a; font-weight: 700; }
-.pd-neg { color: #7d1a1a; font-weight: 700; }
-.pd-zero { color: #888; font-weight: 700; }
-.card-foot { padding: 7px 14px; background: #f5ede6; font-size: 0.65rem; color: #888; border-top: 1px solid #c9b5a5; }
-@media(max-width:480px){ .tab { padding: 7px 10px; font-size: 0.7rem; } }
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:#c9b5a5;min-height:100vh;}
+
+/* ── Header ── */
+.header{background:#7d1a1a;padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden;}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#c9b5a5,#e07878,#c9b5a5);}
+.header h1{font-family:'Playfair Display',Georgia,serif;font-size:1.55rem;color:#e8b4b4;font-weight:800;letter-spacing:.02em;}
+.header .sub{font-size:.72rem;color:#c98a8a;margin-top:4px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;}
+
+/* ── Filters ── */
+.filters{background:#d8c8ba;border-bottom:2px solid #b8a492;padding:16px 16px 14px;}
+.filter-row{display:flex;gap:12px;flex-wrap:wrap;max-width:700px;margin:0 auto;}
+.fg{flex:1;min-width:140px;}
+.fg label{display:block;font-size:.68rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;font-family:'Source Sans 3',sans-serif;}
+.fg select{width:100%;padding:9px 12px;border:2px solid #b8a492;border-radius:6px;font-size:.88rem;font-weight:600;color:#5c1010;background:#fff;cursor:pointer;font-family:'Source Sans 3',sans-serif;transition:border-color .2s;}
+.fg select:focus{outline:none;border-color:#7d1a1a;box-shadow:0 0 0 3px rgba(125,26,26,.15);}
+.fg select:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ── Main ── */
+.main{max-width:700px;margin:0 auto;padding:20px 14px 40px;}
+
+/* ── Division block ── */
+.div-block{margin-bottom:28px;}
+.div-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.div-name{font-family:'Playfair Display',Georgia,serif;font-size:1.1rem;font-weight:700;color:#5c1010;white-space:nowrap;}
+.div-count{font-size:.7rem;font-weight:700;color:#fff;background:#7d1a1a;padding:2px 9px;border-radius:10px;white-space:nowrap;}
+.div-line{flex:1;height:1px;background:#b8a492;}
+
+/* ── Table ── */
+.standings-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(80,20,20,.08);overflow:hidden;}
+.standings-table thead th{font-size:.65rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.08em;padding:11px 8px 9px;background:#f0e6dd;border-bottom:2px solid #d8c8ba;text-align:center;white-space:nowrap;}
+.standings-table thead th:first-child{text-align:left;padding-left:14px;width:30px;}
+.standings-table thead th:nth-child(2){text-align:left;padding-left:0;}
+
+.standings-table tbody tr{transition:background .15s;}
+.standings-table tbody tr:hover{background:#faf6f2;}
+.standings-table tbody tr:not(:last-child) td{border-bottom:1px solid #eee4dc;}
+
+.standings-table tbody td{padding:10px 8px;text-align:center;font-size:.85rem;color:#333;}
+.standings-table tbody td:first-child{text-align:center;padding-left:14px;font-weight:700;color:#7d1a1a;font-family:'Playfair Display',Georgia,serif;font-size:.9rem;}
+.standings-table tbody td:nth-child(2){text-align:left;padding-left:0;font-weight:700;color:#222;}
+
+/* Highlight top row */
+.standings-table tbody tr.rank-1 td{background:#fdf8f4;}
+.standings-table tbody tr.rank-1 td:first-child{position:relative;}
+.standings-table tbody tr.rank-1 td:first-child::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:#7d1a1a;border-radius:0 2px 2px 0;}
+
+/* W/L/PTS colors */
+.w-col{color:#1a6b1a !important;font-weight:700 !important;}
+.l-col{color:#a22 !important;font-weight:700 !important;}
+.pts-col{color:#7d1a1a !important;font-weight:800 !important;font-size:.9rem !important;}
+.diff-pos{color:#1a6b1a !important;font-weight:600 !important;}
+.diff-neg{color:#a22 !important;font-weight:600 !important;}
+
+/* ── Legend ── */
+.legend{background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(80,20,20,.08);padding:14px 18px;margin-top:8px;}
+.legend-title{font-family:'Playfair Display',Georgia,serif;font-size:.82rem;font-weight:700;color:#5c1010;margin-bottom:8px;}
+.legend-row{display:flex;flex-wrap:wrap;gap:14px;}
+.legend-item{font-size:.7rem;color:#555;font-weight:600;}
+.legend-item span{color:#7d1a1a;font-weight:700;}
+
+/* ── Footer ── */
+.footer{text-align:center;padding:14px;font-family:'Playfair Display',Georgia,serif;font-size:.72rem;color:#5c1010;border-top:1px solid #b8a492;background:#d8c8ba;}
+
+@media(max-width:520px){
+  .filter-row{flex-direction:column;}
+  .fg{min-width:100%;}
+  .standings-table{font-size:.78rem;}
+  .standings-table thead th{padding:9px 5px 7px;font-size:.6rem;}
+  .standings-table tbody td{padding:8px 5px;font-size:.8rem;}
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="sub">NA Coptic League</div>
-  <h1>2026 Regular Season Standings</h1>
-  <div class="tabs" id="tabs"></div>
+  <h1>2026 Regular Season — Standings</h1>
+  <div class="sub">NA Coptic League &middot; May – July 2026</div>
 </div>
 
-<div class="main">
-  <div class="card">
-    <div class="card-head">
-      <span id="divLabel">HS – NY Division</span>
-      <small>REGULAR SEASON</small>
+<div class="filters">
+  <div class="filter-row">
+    <div class="fg">
+      <label>Division</label>
+      <select id="fdiv" onchange="render()">
+        <option value="">All Divisions</option>
+        <option value="JHS">Junior High (JHS)</option>
+        <option value="Girls">Girls</option>
+        <option value="HS-NY">High School — NY</option>
+        <option value="HS-NJ">High School — NJ</option>
+        <option value="College">College</option>
+        <option value="Mens">Mens</option>
+      </select>
     </div>
-    <div style="overflow-x:auto">
-      <table>
-        <thead>
-          <tr>
-            <th>Team</th>
-            <th>W</th><th>L</th><th>T</th><th>PTS</th><th>PF</th><th>PA</th><th>PD</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-    <div class="card-foot">Tiebreakers: Win % → Wins → Point Diff → Points For → Points Against → Losses &nbsp;·&nbsp; Win = 2 pts</div>
   </div>
 </div>
 
+<div class="main"><div id="out"></div></div>
+
+<div class="footer">NA Coptic League 2026 &nbsp;&middot;&nbsp; Regular Season &nbsp;&middot;&nbsp; May 2026 – July 2026</div>
+
 <script>
-var TEAMS = {
-  "HS-NY":  ["Astoria","BK 1","BK 2","LI 1","LI 2","Queens","SI 1 1","SI 1 2","SI 2 1","SI 2 2"],
-  "HS-NJ":  ["Bayonne SASA 1","Bayonne SASA 2","Bayonne VMSJ 1","Bayonne VMSJ 2","Belleville","EB 1","EB 2","EB 3","Holmdel","Makkar","Philly","Piscataway","Upstate Paramus","Westside"],
-  "Girls":  ["Astoria","Bayonne SASA","Belleville","BK","EB 1","EB 2","Holmdel","Makkar","Queens","SI 1","SI 2","SI 3","Upstate"],
-  "JHS":    ["Astoria","Bayonne SASA","Bayonne VMSJ","EB 1","EB 2","Holmdel","Makkar","Philadelphia","Queens","SI 1","SI 2","Summit","Westside"],
-  "College":["Astoria","Bayonne SASA","Bayonne VMSJ","BK","EB 1","EB 2","EB 3","Holmdel","LI","Philly","Piscataway","Queens","SI 1","SI 2","Upstate"],
-  "Mens":   ["Bayonne SASA","EB","Hatfield","Holmdel","LI","SI 1","SI 2","Summit"]
+/* ─────────────────────────────────────────────
+   GAME RESULTS — NA Coptic League 2026
+   ─────────────────────────────────────────────
+   Add scores (s1 / s2) once a game is played.
+   Leave s1 & s2 out (or null) for unplayed games.
+   Standings auto-calculate from scored games only.
+
+   POINTS:  Win = 2 · Tie = 0 · Loss = 0
+   TIEBREAKERS (CHMeetings order):
+     1. Winning Pct
+     2. Games Won
+     3. Points Differential
+     4. Points For
+     5. Points Against
+     6. Games Lost (fewest)
+   Ties are NOT counted as ½ win in PCT.
+   ───────────────────────────────────────────── */
+
+var GAMES=[
+  /* ── High School NY ── */
+  {t1:"SI1 (1)",t2:"SI2 (1)",div:"HS-NY",date:"2026-05-03",s1:null,s2:null},
+  {t1:"SI2 (2)",t2:"SI1 (2)",div:"HS-NY",date:"2026-05-02",s1:null,s2:null},
+  {t1:"Brooklyn (1)",t2:"Brooklyn (2)",div:"HS-NY",date:"2026-05-02",s1:null,s2:null},
+  {t1:"Astoria",t2:"Queens",div:"HS-NY",date:"2026-05-02",s1:null,s2:null},
+
+  /* ── High School NJ ── */
+  {t1:"Bayonne 1 (SASA) (1)",t2:"Belleville",div:"HS-NJ",date:"2026-05-03",s1:null,s2:null},
+  {t1:"Holmdel",t2:"West Side",div:"HS-NJ",date:"2026-05-02",s1:null,s2:null},
+  {t1:"Paramus",t2:"Piscataway",div:"HS-NJ",date:"2026-05-03",s1:null,s2:null},
+
+  /* ── JHS ── */
+  {t1:"Queens",t2:"Astoria",div:"JHS",date:"2026-05-02",s1:null,s2:null},
+  {t1:"West Side",t2:"Bayonne 1 (SASA)",div:"JHS",date:"2026-05-02",s1:null,s2:null},
+  {t1:"SI1",t2:"Queens",div:"JHS",date:"2026-05-02",s1:null,s2:null},
+  {t1:"Astoria",t2:"SI2",div:"JHS",date:"2026-05-02",s1:null,s2:null},
+
+  /* ── Girls ── */
+  {t1:"SI1",t2:"SI2",div:"Girls",date:"2026-05-02",s1:null,s2:null},
+  {t1:"Brooklyn",t2:"Queens",div:"Girls",date:"2026-05-02",s1:null,s2:null},
+  {t1:"Holmdel",t2:"Belleville",div:"Girls",date:"2026-05-03",s1:null,s2:null},
+
+  /* ── College ── */
+  {t1:"Brooklyn",t2:"Bayonne 2 (VMSJ)",div:"College",date:"2026-05-02",s1:null,s2:null},
+  {t1:"Philadelphia",t2:"Holmdel",div:"College",date:"2026-05-02",s1:null,s2:null},
+  {t1:"Piscataway",t2:"Bayonne 1 (SASA)",div:"College",date:"2026-05-03",s1:null,s2:null},
+
+  /* ── Mens ── */
+  {t1:"SI2",t2:"Queens",div:"Mens",date:"2026-05-02",s1:null,s2:null},
+  {t1:"SI2",t2:"Holmdel",div:"Mens",date:"2026-05-02",s1:null,s2:null},
+  {t1:"SI1",t2:"Bayonne 1 (SASA)",div:"Mens",date:"2026-05-03",s1:null,s2:null}
+];
+
+/* ── Complete team registry (from official division list) ── */
+var TEAMS={
+  "JHS":["Astoria","Bayonne 1 (SASA)","Bayonne 2 (VMSJ)","EB (1)","EB (2)","Holmdel","Makkar","Philadelphia","Queens","SI1","SI2","Summit","West Side"],
+  "Girls":["Bayonne 1 (SASA)","Belleville","Brooklyn","EB (1)","EB (2)","Holmdel","Makkar","Queens","SI1","SI2","SI3","Upstate"],
+  "HS-NY":["Astoria","Brooklyn (1)","Brooklyn (2)","Long Island (1)","Long Island (2)","Queens","SI1 (1)","SI1 (2)","SI2 (1)","SI2 (2)"],
+  "HS-NJ":["Bayonne 1 (SASA) (1)","Bayonne 1 (SASA) (2)","Bayonne 2 (VMSJ) (1)","Bayonne 2 (VMSJ) (2)","Belleville","EB (1)","EB (2)","EB (3)","Holmdel","Makkar","Philadelphia","Piscataway","Paramus","West Side","Upstate"],
+  "College":["Bayonne 1 (SASA)","Bayonne 2 (VMSJ)","Brooklyn","EB (1)","EB (2)","EB (3)","Holmdel","Long Island","Belleville","Philadelphia","Piscataway","Queens","SI1","SI2","Upstate"],
+  "Mens":["Bayonne 1 (SASA)","EB","Hatfield","Holmdel","Long Island","SI1","SI2","Summit","Queens"]
 };
-var DIVS = ["HS-NY","HS-NJ","JHS","Girls","College","Mens"];
-var DIV_LABELS = {"HS-NY":"HS – NY","HS-NJ":"HS – NJ","JHS":"JHS","Girls":"Girls","College":"College","Mens":"Mens"};
 
-// ── RESULTS — add scores here ──────────────────────────────
-// { div, winner, loser, ws, ls }
-var RESULTS = [];
-// ──────────────────────────────────────────────────────────
+var DIV_LABELS={"HS-NY":"High School · NY","HS-NJ":"High School · NJ","JHS":"Junior High","Girls":"Girls","College":"College","Mens":"Mens"};
+var DIV_ORDER=["JHS","Girls","HS-NY","HS-NJ","College","Mens"];
 
-var activeDiv = "HS-NY";
+/* Points awarded */
+var PTS_WIN=2, PTS_TIE=0, PTS_LOSS=0;
 
-// Build tabs
-DIVS.forEach(function(d) {
-  var btn = document.createElement("button");
-  btn.className = "tab" + (d === activeDiv ? " active" : "");
-  btn.textContent = DIV_LABELS[d];
-  btn.onclick = function() {
-    activeDiv = d;
-    document.querySelectorAll(".tab").forEach(function(b){ b.classList.remove("active"); });
-    btn.classList.add("active");
-    document.getElementById("divLabel").textContent = DIV_LABELS[d] + " Division";
-    render();
-  };
-  document.getElementById("tabs").appendChild(btn);
-});
+/* ── Build standings from scored games ── */
+function calcStandings(){
+  var teams={};
 
-function calcStandings(div) {
-  var stats = {};
-  (TEAMS[div]||[]).forEach(function(t){ stats[t]={team:t,w:0,l:0,tie:0,pf:0,pa:0,gp:0}; });
-  RESULTS.filter(function(r){ return r.div===div; }).forEach(function(r) {
-    if (!stats[r.winner]) stats[r.winner]={team:r.winner,w:0,l:0,tie:0,pf:0,pa:0,gp:0};
-    if (!stats[r.loser])  stats[r.loser]= {team:r.loser, w:0,l:0,tie:0,pf:0,pa:0,gp:0};
-    stats[r.winner].w++; stats[r.winner].gp++;
-    stats[r.loser].l++;  stats[r.loser].gp++;
-    if (r.ws != null) { stats[r.winner].pf+=r.ws; stats[r.winner].pa+=r.ls; stats[r.loser].pf+=r.ls; stats[r.loser].pa+=r.ws; }
+  function ensure(name,div){
+    var key=div+'||'+name;
+    if(!teams[key])teams[key]={name:name,div:div,w:0,l:0,t:0,pf:0,pa:0,results:[]};
+    return teams[key];
+  }
+
+  /* Register ALL teams from official roster first */
+  DIV_ORDER.forEach(function(div){
+    if(TEAMS[div])TEAMS[div].forEach(function(name){ensure(name,div);});
   });
-  return Object.values(stats).sort(function(a,b){
-    var gpA=a.w+a.l+a.tie, gpB=b.w+b.l+b.tie;
-    var pA=gpA?a.w/gpA:0, pB=gpB?b.w/gpB:0;
-    if (pB!==pA) return pB-pA;
-    if (b.w!==a.w) return b.w-a.w;
-    var pdA=a.pf-a.pa, pdB=b.pf-b.pa;
-    if (pdB!==pdA) return pdB-pdA;
-    if (b.pf!==a.pf) return b.pf-a.pf;
-    if (a.pa!==b.pa) return a.pa-b.pa;
+
+  /* Then process game results */
+  GAMES.forEach(function(g){
+    ensure(g.t1,g.div);
+    ensure(g.t2,g.div);
+
+    if(g.s1==null||g.s2==null)return; /* unplayed */
+
+    var a=ensure(g.t1,g.div);
+    var b=ensure(g.t2,g.div);
+
+    a.pf+=g.s1; a.pa+=g.s2;
+    b.pf+=g.s2; b.pa+=g.s1;
+
+    if(g.s1>g.s2){
+      a.w++; b.l++;
+      a.results.push({date:g.date,r:'W'});
+      b.results.push({date:g.date,r:'L'});
+    }else if(g.s2>g.s1){
+      b.w++; a.l++;
+      a.results.push({date:g.date,r:'L'});
+      b.results.push({date:g.date,r:'W'});
+    }else{
+      /* tie — does NOT count as ½ win per league rules */
+      a.t++; b.t++;
+      a.results.push({date:g.date,r:'T'});
+      b.results.push({date:g.date,r:'T'});
+    }
+  });
+
+  var list=Object.values(teams);
+  list.forEach(function(t){
+    var gp=t.w+t.l+t.t;
+    t.gp=gp;
+    /* Winning Pct: ties NOT counted as ½ win */
+    t.pct=gp?t.w/gp:0;
+    t.diff=t.pf-t.pa;
+    /* Points: W=2, T=0, L=0 */
+    t.pts=t.w*PTS_WIN+t.t*PTS_TIE+t.l*PTS_LOSS;
+
+    /* streak */
+    t.streak='–';
+    if(t.results.length){
+      t.results.sort(function(a,b){return a.date<b.date?-1:1;});
+      var last=t.results[t.results.length-1].r;
+      var count=0;
+      for(var i=t.results.length-1;i>=0;i--){
+        if(t.results[i].r===last)count++;else break;
+      }
+      t.streak=last+count;
+    }
+  });
+  return list;
+}
+
+/* ── CHMeetings tiebreaker sort ──
+   1. Winning Pct (desc)
+   2. Games Won (desc)
+   3. Points Differential (desc)
+   4. Points For (desc)
+   5. Points Against (asc — fewer is better)
+   6. Games Lost (asc — fewer is better)
+   ───────────────────────────────── */
+function sortTeams(arr){
+  return arr.sort(function(a,b){
+    if(b.pct!==a.pct)return b.pct-a.pct;
+    if(b.w!==a.w)return b.w-a.w;
+    if(b.diff!==a.diff)return b.diff-a.diff;
+    if(b.pf!==a.pf)return b.pf-a.pf;
+    if(a.pa!==b.pa)return a.pa-b.pa;
     return a.l-b.l;
   });
 }
 
-function render() {
-  var rows = calcStandings(activeDiv);
-  document.getElementById("tbody").innerHTML = rows.map(function(t, i) {
-    var pts = t.w*2, pd = t.pf-t.pa;
-    var pdClass = pd>0?"pd-pos":pd<0?"pd-neg":"pd-zero";
-    return '<tr><td><span class="rank">'+(i+1)+'</span>'+t.team+'</td>'+
-      '<td>'+t.w+'</td><td>'+t.l+'</td><td>'+t.tie+'</td>'+
-      '<td class="pts">'+pts+'</td>'+
-      '<td>'+t.pf+'</td><td>'+t.pa+'</td>'+
-      '<td class="'+pdClass+'">'+(pd>0?"+"+pd:pd)+'</td></tr>';
-  }).join("");
+/* ── Render ── */
+function render(){
+  var divF=document.getElementById('fdiv').value;
+  var out=document.getElementById('out');
+  var all=calcStandings();
+
+  if(divF)all=all.filter(function(t){return t.div===divF;});
+
+  var byDiv={};
+  all.forEach(function(t){if(!byDiv[t.div])byDiv[t.div]=[];byDiv[t.div].push(t);});
+
+  var divs=DIV_ORDER.filter(function(d){return byDiv[d];});
+
+  var h='';
+
+  divs.forEach(function(div){
+    var teams=sortTeams(byDiv[div]);
+    h+='<div class="div-block">';
+    h+='<div class="div-header"><span class="div-name">'+DIV_LABELS[div]+'</span><span class="div-count">'+teams.length+' teams</span><div class="div-line"></div></div>';
+
+    /* Columns: # Team L T PTS PF PA PD  (matching CHMeetings display checkboxes) */
+    h+='<table class="standings-table"><thead><tr>';
+    h+='<th>#</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PTS</th><th>PF</th><th>PA</th><th>PD</th>';
+    h+='</tr></thead><tbody>';
+
+    teams.forEach(function(t,i){
+        var rank=i+1;
+        var cls=rank===1?' class="rank-1"':'';
+        var diffStr=t.diff>0?'+'+t.diff:t.diff===0?'0':''+t.diff;
+        var diffCls=t.diff>0?'diff-pos':t.diff<0?'diff-neg':'';
+
+        h+='<tr'+cls+'>';
+        h+='<td>'+rank+'</td>';
+        h+='<td>'+t.name+'</td>';
+        h+='<td class="w-col">'+t.w+'</td>';
+        h+='<td class="l-col">'+t.l+'</td>';
+        h+='<td>'+t.t+'</td>';
+        h+='<td class="pts-col">'+t.pts+'</td>';
+        h+='<td>'+t.pf+'</td>';
+        h+='<td>'+t.pa+'</td>';
+        h+='<td class="'+diffCls+'">'+diffStr+'</td>';
+        h+='</tr>';
+      });
+
+    h+='</tbody></table></div>';
+  });
+
+  /* Legend */
+  h+='<div class="legend">';
+  h+='<div class="legend-title">Column Key</div>';
+  h+='<div class="legend-row">';
+  h+='<div class="legend-item"><span>W</span> Wins</div>';
+  h+='<div class="legend-item"><span>L</span> Losses</div>';
+  h+='<div class="legend-item"><span>T</span> Ties</div>';
+  h+='<div class="legend-item"><span>PTS</span> Points (W=2, T=0, L=0)</div>';
+  h+='<div class="legend-item"><span>PF</span> Points For</div>';
+  h+='<div class="legend-item"><span>PA</span> Points Against</div>';
+  h+='<div class="legend-item"><span>PD</span> Point Differential</div>';
+  h+='</div>';
+  h+='<div class="legend-row" style="margin-top:8px;">';
+  h+='<div class="legend-item" style="color:#888;font-size:.65rem;">Tiebreakers: Win Pct → Games Won → PD → PF → PA → Games Lost</div>';
+  h+='</div>';
+  h+='</div>';
+
+  out.innerHTML=h;
 }
 
 render();
