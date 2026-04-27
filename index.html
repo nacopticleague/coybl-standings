@@ -1,6 +1,89 @@
-import { useState, useEffect } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NA Coptic League 2026 Standings</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #c9b5a5; min-height: 100vh; }
+.header { background: #7d1a1a; padding: 16px 20px 0; text-align: center; }
+.header .sub { font-size: 0.65rem; color: #e07878; letter-spacing: 0.18em; text-transform: uppercase; }
+.header h1 { font-family: Georgia, serif; font-size: 1.3rem; color: #fff; font-weight: 700; margin-bottom: 14px; }
+.tabs { display: flex; gap: 2px; justify-content: center; flex-wrap: wrap; }
+.tab { padding: 8px 14px; border: none; cursor: pointer; font-weight: 700; font-size: 0.76rem;
+  background: transparent; color: #e07878; border-radius: 6px 6px 0 0; white-space: nowrap; transition: all 0.15s; }
+.tab.active { background: #fff; color: #7d1a1a; }
+.main { max-width: 700px; margin: 0 auto; padding: 20px 14px 48px; }
+.statusbar { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 14px; }
+.statusbar .err { font-size: 0.72rem; color: #c0392b; font-weight: 700; }
+.statusbar .ts  { font-size: 0.68rem; color: #888; }
+.btn-refresh { padding: 5px 12px; background: #7d1a1a; color: #fff; border: none;
+  border-radius: 5px; font-weight: 700; font-size: 0.72rem; cursor: pointer; }
+.btn-refresh:disabled { opacity: 0.6; }
+.card { background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(80,20,20,.13); overflow: hidden; }
+.card-head { background: #7d1a1a; padding: 11px 16px; display: flex; align-items: center; justify-content: space-between; }
+.card-head span { color: #fff; font-family: Georgia, serif; font-weight: 700; font-size: 0.95rem; }
+.card-head small { color: #e07878; font-size: 0.68rem; letter-spacing: 0.1em; }
+table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+thead tr { background: #f5ede6; border-bottom: 2px solid #c9b5a5; }
+th { padding: 9px 10px; text-align: center; color: #5c1010; font-weight: 700; font-size: 0.68rem;
+  letter-spacing: 0.09em; text-transform: uppercase; min-width: 38px; }
+th:first-child { text-align: left; padding-left: 14px; min-width: 130px; }
+td { padding: 10px 10px; text-align: center; color: #222; }
+td:first-child { text-align: left; padding-left: 14px; font-weight: 700; white-space: nowrap; }
+tr:nth-child(even) { background: #faf4ef; }
+tr { border-bottom: 1px solid #ede0d8; }
+.rank { display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%; background: transparent;
+  border: 2px solid #7d1a1a; color: #7d1a1a; font-size: 0.65rem; font-weight: 800; margin-right: 8px; }
+.pts { color: #7d1a1a; font-weight: 800; }
+.pd-pos { color: #1a7d2a; font-weight: 700; }
+.pd-neg { color: #7d1a1a; font-weight: 700; }
+.pd-zero { color: #888; font-weight: 700; }
+.card-foot { padding: 7px 14px; background: #f5ede6; font-size: 0.65rem; color: #888; border-top: 1px solid #c9b5a5; }
+.autotxt { text-align: center; margin-top: 14px; font-size: 0.7rem; color: #888; }
+</style>
+</head>
+<body>
 
-const TEAMS = {
+<div class="header">
+  <div class="sub">NA Coptic League</div>
+  <h1>2026 Regular Season Standings</h1>
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="main">
+  <div class="statusbar">
+    <span class="err" id="err"></span>
+    <span class="ts" id="ts"></span>
+    <button class="btn-refresh" id="btnRefresh" onclick="fetchSheet()">↻ Refresh</button>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <span id="divLabel">HS – NY Division</span>
+      <small>REGULAR SEASON</small>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th>W</th><th>L</th><th>T</th><th>PTS</th><th>PF</th><th>PA</th><th>PD</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="card-foot">Tiebreakers: Win % → Wins → Point Diff → Points For → Points Against → Losses &nbsp;·&nbsp; Win = 2 pts</div>
+  </div>
+  <div class="autotxt" id="autoTxt"></div>
+</div>
+
+<script>
+var SHEET_URL = ""; // ← paste your Google Sheets CSV URL here
+
+var TEAMS = {
   "HS-NY":  ["Astoria","BK 1","BK 2","LI 1","LI 2","Queens","SI 1 1","SI 1 2","SI 2 1","SI 2 2"],
   "HS-NJ":  ["Bayonne SASA 1","Bayonne SASA 2","Bayonne VMSJ 1","Bayonne VMSJ 2","Belleville","EB 1","EB 2","EB 3","Holmdel","Makkar","Philly","Piscataway","Upstate Paramus","Westside"],
   "Girls":  ["Astoria","Bayonne SASA","Belleville","BK","EB 1","EB 2","Holmdel","Makkar","Queens","SI 1","SI 2","SI 3","Upstate"],
@@ -8,62 +91,76 @@ const TEAMS = {
   "College":["Astoria","Bayonne SASA","Bayonne VMSJ","BK","EB 1","EB 2","EB 3","Holmdel","LI","Philly","Piscataway","Queens","SI 1","SI 2","Upstate"],
   "Mens":   ["Bayonne SASA","EB","Hatfield","Holmdel","LI","SI 1","SI 2","Summit"]
 };
-const DIVS = ["HS-NY","HS-NJ","JHS","Girls","College","Mens"];
-const DIV_LABELS = {"HS-NY":"HS – NY","HS-NJ":"HS – NJ","JHS":"JHS","Girls":"Girls","College":"College","Mens":"Mens"};
-const SHEET_URL = "";
+var DIVS = ["HS-NY","HS-NJ","JHS","Girls","College","Mens"];
+var DIV_LABELS = {"HS-NY":"HS – NY","HS-NJ":"HS – NJ","JHS":"JHS","Girls":"Girls","College":"College","Mens":"Mens"};
 
-const C = {
-  bg:"#c9b5a5", card:"#fff", maroon:"#7d1a1a", maroonMid:"#b05050",
-  maroonLight:"#e07878", tan:"#d8c8ba", border:"#c9b5a5",
-  stripe:"#faf4ef", header:"#f5ede6", text:"#222", sub:"#5c1010", muted:"#888"
-};
+var activeDiv = "HS-NY";
+var allRows = [];
+
+// Build tabs
+var tabsEl = document.getElementById("tabs");
+DIVS.forEach(function(d) {
+  var btn = document.createElement("button");
+  btn.className = "tab" + (d === activeDiv ? " active" : "");
+  btn.textContent = DIV_LABELS[d];
+  btn.onclick = function() {
+    activeDiv = d;
+    document.querySelectorAll(".tab").forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    document.getElementById("divLabel").textContent = DIV_LABELS[d] + " Division";
+    renderStandings();
+  };
+  tabsEl.appendChild(btn);
+});
 
 function parseCSV(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  var lines = text.split(/\r?\n/).filter(function(l){ return l.trim(); });
   if (lines.length < 2) return [];
-  const split = line => {
-    const vals = []; let cur = ""; let inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
+  function splitLine(line) {
+    var vals = [], cur = "", inQ = false;
+    for (var i = 0; i < line.length; i++) {
+      var c = line[i];
       if (c === '"') inQ = !inQ;
       else if (c === ',' && !inQ) { vals.push(cur.trim().replace(/^"|"$/g,"")); cur = ""; }
       else cur += c;
     }
     vals.push(cur.trim().replace(/^"|"$/g,""));
     return vals;
-  };
-  const headers = split(lines[0]);
-  return lines.slice(1).map(l => {
-    const v = split(l), o = {};
-    headers.forEach((h, i) => { o[h] = v[i] || ""; });
+  }
+  var headers = splitLine(lines[0]);
+  return lines.slice(1).map(function(l) {
+    var v = splitLine(l), o = {};
+    headers.forEach(function(h,i){ o[h] = v[i] || ""; });
     return o;
-  }).filter(r => Object.values(r).some(v => v));
+  }).filter(function(r){ return Object.values(r).some(function(v){ return v; }); });
 }
 
-function findCol(row, ...names) {
-  for (const k of Object.keys(row)) {
-    const kl = k.toLowerCase().replace(/[^a-z0-9]/g,"");
-    for (const n of names) {
-      if (kl.includes(n.toLowerCase().replace(/[^a-z0-9]/g,""))) return row[k];
+function findCol(row) {
+  var names = Array.prototype.slice.call(arguments, 1);
+  var keys = Object.keys(row);
+  for (var i = 0; i < keys.length; i++) {
+    var kl = keys[i].toLowerCase().replace(/[^a-z0-9]/g,"");
+    for (var j = 0; j < names.length; j++) {
+      if (kl.includes(names[j].toLowerCase().replace(/[^a-z0-9]/g,""))) return row[keys[i]];
     }
   }
   return "";
 }
 
-function parseScoreStr(s) {
-  const m = String(s||"").match(/(\d+)\s*[-–:]\s*(\d+)/);
+function parseScore(s) {
+  var m = String(s||"").match(/(\d+)\s*[-–:]\s*(\d+)/);
   return m ? [parseInt(m[1]), parseInt(m[2])] : null;
 }
 
 function calcStandings(div, rows) {
-  const stats = {};
-  (TEAMS[div]||[]).forEach(t => { stats[t]={team:t,w:0,l:0,tie:0,pf:0,pa:0,gp:0}; });
-  rows.forEach(r => {
-    const rowDiv = findCol(r,"division").trim();
+  var stats = {};
+  (TEAMS[div]||[]).forEach(function(t){ stats[t]={team:t,w:0,l:0,tie:0,pf:0,pa:0,gp:0}; });
+  rows.forEach(function(r) {
+    var rowDiv = findCol(r,"division").trim();
     if (rowDiv !== div && rowDiv !== DIV_LABELS[div]) return;
-    const winner = findCol(r,"winningteam","winning team","winner").trim();
-    const loser  = findCol(r,"losingteam","losing team","loser").trim();
-    const sc = parseScoreStr(findCol(r,"finalscore","final score","score").trim());
+    var winner = findCol(r,"winningteam","winning team","winner").trim();
+    var loser  = findCol(r,"losingteam","losing team","loser").trim();
+    var sc = parseScore(findCol(r,"finalscore","final score","score").trim());
     if (!winner || !loser) return;
     if (!stats[winner]) stats[winner]={team:winner,w:0,l:0,tie:0,pf:0,pa:0,gp:0};
     if (!stats[loser])  stats[loser]= {team:loser, w:0,l:0,tie:0,pf:0,pa:0,gp:0};
@@ -76,12 +173,12 @@ function calcStandings(div, rows) {
       if (sc) { stats[winner].pf+=sc[0]; stats[winner].pa+=sc[1]; }
     }
   });
-  return Object.values(stats).sort((a,b) => {
-    const gpA=a.w+a.l+a.tie, gpB=b.w+b.l+b.tie;
-    const pA=gpA?a.w/gpA:0, pB=gpB?b.w/gpB:0;
+  return Object.values(stats).sort(function(a,b){
+    var gpA=a.w+a.l+a.tie, gpB=b.w+b.l+b.tie;
+    var pA=gpA?a.w/gpA:0, pB=gpB?b.w/gpB:0;
     if (pB!==pA) return pB-pA;
     if (b.w!==a.w) return b.w-a.w;
-    const pdA=a.pf-a.pa, pdB=b.pf-b.pa;
+    var pdA=a.pf-a.pa, pdB=b.pf-b.pa;
     if (pdB!==pdA) return pdB-pdA;
     if (b.pf!==a.pf) return b.pf-a.pf;
     if (a.pa!==b.pa) return a.pa-b.pa;
@@ -89,119 +186,51 @@ function calcStandings(div, rows) {
   });
 }
 
-export default function App() {
-  const [activeDiv, setActiveDiv] = useState("HS-NY");
-  const [rows, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState(null);
-  const [fetchErr, setFetchErr] = useState("");
-
-  useEffect(() => { if (SHEET_URL) fetchSheet(); }, []);
-  useEffect(() => {
-    if (!SHEET_URL) return;
-    const id = setInterval(fetchSheet, 60000);
-    return () => clearInterval(id);
-  }, []);
-
-  async function fetchSheet() {
-    setLoading(true); setFetchErr("");
-    try {
-      const res = await fetch(SHEET_URL);
-      if (!res.ok) throw new Error();
-      setRows(parseCSV(await res.text()));
-      setLastUpdated(new Date());
-    } catch(e) { setFetchErr("Could not load data."); }
-    setLoading(false);
-  }
-
-  const standings = calcStandings(activeDiv, rows);
-
-  return (
-    <div style={{fontFamily:"Arial,sans-serif",background:C.bg,minHeight:"100vh"}}>
-      <div style={{background:C.maroon,padding:"16px 20px 0",textAlign:"center"}}>
-        <div style={{fontSize:"0.65rem",color:C.maroonLight,letterSpacing:"0.18em",textTransform:"uppercase"}}>NA Coptic League</div>
-        <div style={{fontFamily:"Georgia",fontSize:"1.3rem",color:"#fff",fontWeight:700,marginBottom:14}}>2026 Regular Season Standings</div>
-        <div style={{display:"flex",gap:2,justifyContent:"center",flexWrap:"wrap"}}>
-          {DIVS.map(d => (
-            <button key={d} onClick={() => setActiveDiv(d)}
-              style={{padding:"8px 14px",border:"none",cursor:"pointer",fontWeight:700,fontSize:"0.76rem",
-                background:activeDiv===d?"#fff":"transparent",
-                color:activeDiv===d?C.maroon:C.maroonLight,
-                borderRadius:"6px 6px 0 0",whiteSpace:"nowrap"}}>
-              {DIV_LABELS[d]}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div style={{maxWidth:700,margin:"0 auto",padding:"20px 14px 48px"}}>
-
-        {/* Status */}
-        <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",gap:10,marginBottom:14}}>
-          {fetchErr && <span style={{fontSize:"0.72rem",color:"#c0392b",fontWeight:700}}>⚠️ {fetchErr}</span>}
-          {lastUpdated && <span style={{fontSize:"0.68rem",color:C.muted}}>Updated {lastUpdated.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</span>}
-          {SHEET_URL && (
-            <button onClick={fetchSheet} disabled={loading}
-              style={{padding:"5px 12px",background:C.maroon,color:"#fff",border:"none",
-                borderRadius:5,fontWeight:700,fontSize:"0.72rem",cursor:"pointer",opacity:loading?0.6:1}}>
-              {loading?"…":"↻ Refresh"}
-            </button>
-          )}
-        </div>
-
-        {/* Standings Table */}
-        <div style={{background:C.card,borderRadius:10,boxShadow:"0 2px 12px rgba(80,20,20,.13)",overflow:"hidden"}}>
-          <div style={{background:C.maroon,padding:"11px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-            <span style={{color:"#fff",fontFamily:"Georgia",fontWeight:700,fontSize:"0.95rem"}}>{DIV_LABELS[activeDiv]} Division</span>
-            <span style={{color:C.maroonLight,fontSize:"0.68rem",letterSpacing:"0.1em"}}>REGULAR SEASON</span>
-          </div>
-          <div style={{overflowX:"auto"}}>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:"0.84rem"}}>
-              <thead>
-                <tr style={{background:C.header,borderBottom:`2px solid ${C.border}`}}>
-                  <th style={{padding:"9px 14px",textAlign:"left",color:C.sub,fontWeight:700,fontSize:"0.68rem",letterSpacing:"0.09em",textTransform:"uppercase",minWidth:130}}>Team</th>
-                  {["W","L","T","PTS","PF","PA","PD"].map(col => (
-                    <th key={col} style={{padding:"9px 10px",textAlign:"center",color:C.sub,fontWeight:700,fontSize:"0.68rem",letterSpacing:"0.09em",textTransform:"uppercase",minWidth:38}}>{col}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {standings.map((t,i) => {
-                  const pts=t.w*2, pd=t.pf-t.pa;
-                  return (
-                    <tr key={t.team} style={{background:i%2===0?C.card:C.stripe,borderBottom:`1px solid #ede0d8`}}>
-                      <td style={{padding:"10px 14px",fontWeight:700,color:C.text,whiteSpace:"nowrap"}}>
-                        <span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",
-                          width:20,height:20,borderRadius:"50%",background:"transparent",
-                          border:`2px solid ${C.maroon}`,color:C.maroon,fontSize:"0.65rem",
-                          fontWeight:800,marginRight:8,flexShrink:0}}>{i+1}</span>
-                        {t.team}
-                      </td>
-                      {[t.w,t.l,t.tie,pts,t.pf,t.pa].map((val,vi) => (
-                        <td key={vi} style={{padding:"10px 10px",textAlign:"center",
-                          color:vi===3?C.maroon:C.text,fontWeight:vi===3?800:400}}>{val}</td>
-                      ))}
-                      <td style={{padding:"10px 10px",textAlign:"center",
-                        color:pd>0?"#1a7d2a":pd<0?C.maroon:"#888",fontWeight:700}}>
-                        {pd>0?`+${pd}`:pd}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div style={{padding:"7px 14px",background:C.header,fontSize:"0.65rem",color:C.muted,borderTop:`1px solid ${C.border}`}}>
-            Tiebreakers: Win % → Wins → Point Diff → Points For → Points Against → Losses &nbsp;·&nbsp; Win = 2 pts
-          </div>
-        </div>
-
-        {SHEET_URL && (
-          <div style={{textAlign:"center",marginTop:14,fontSize:"0.7rem",color:C.muted}}>
-            Standings auto-refresh every 60 seconds
-          </div>
-        )}
-      </div>
-    </div>
-  );
+function renderStandings() {
+  var tbody = document.getElementById("tbody");
+  var standings = calcStandings(activeDiv, allRows);
+  tbody.innerHTML = standings.map(function(t, i) {
+    var pts = t.w * 2, pd = t.pf - t.pa;
+    var pdClass = pd > 0 ? "pd-pos" : pd < 0 ? "pd-neg" : "pd-zero";
+    var pdStr = pd > 0 ? "+" + pd : pd;
+    return '<tr>' +
+      '<td><span class="rank">' + (i+1) + '</span>' + t.team + '</td>' +
+      '<td>' + t.w + '</td><td>' + t.l + '</td><td>' + t.tie + '</td>' +
+      '<td class="pts">' + pts + '</td>' +
+      '<td>' + t.pf + '</td><td>' + t.pa + '</td>' +
+      '<td class="' + pdClass + '">' + pdStr + '</td>' +
+      '</tr>';
+  }).join("");
 }
+
+async function fetchSheet() {
+  if (!SHEET_URL) { renderStandings(); return; }
+  var btn = document.getElementById("btnRefresh");
+  btn.disabled = true; btn.textContent = "…";
+  document.getElementById("err").textContent = "";
+  try {
+    var res = await fetch(SHEET_URL);
+    if (!res.ok) throw new Error();
+    allRows = parseCSV(await res.text());
+    var now = new Date();
+    document.getElementById("ts").textContent =
+      "Updated " + now.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+    document.getElementById("autoTxt").textContent = "Standings auto-refresh every 60 seconds";
+  } catch(e) {
+    document.getElementById("err").textContent = "⚠️ Could not load data.";
+  }
+  btn.disabled = false; btn.textContent = "↻ Refresh";
+  renderStandings();
+}
+
+// Init
+renderStandings();
+if (SHEET_URL) {
+  fetchSheet();
+  setInterval(fetchSheet, 60000);
+} else {
+  document.getElementById("btnRefresh").style.display = "none";
+}
+</script>
+</body>
+</html>
