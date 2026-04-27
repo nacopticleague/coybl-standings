@@ -60,15 +60,9 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
 .diff-pos{color:#1a6b1a !important;font-weight:600 !important;}
 .diff-neg{color:#a22 !important;font-weight:600 !important;}
 
-/* ── Legend ── */
-.legend{background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(80,20,20,.08);padding:14px 18px;margin-top:8px;}
-.legend-title{font-family:'Playfair Display',Georgia,serif;font-size:.82rem;font-weight:700;color:#5c1010;margin-bottom:8px;}
-.legend-row{display:flex;flex-wrap:wrap;gap:14px;}
-.legend-item{font-size:.7rem;color:#555;font-weight:600;}
-.legend-item span{color:#7d1a1a;font-weight:700;}
-
-/* ── Footer ── */
-.footer{text-align:center;padding:14px;font-family:'Playfair Display',Georgia,serif;font-size:.72rem;color:#5c1010;border-top:1px solid #b8a492;background:#d8c8ba;}
+/* ── Footnote ── */
+.footnote{margin-top:14px;padding:12px 16px;font-size:.68rem;color:#777;line-height:1.7;}
+.footnote span{color:#5c1010;font-weight:700;}
 
 @media(max-width:520px){
   .filter-row{flex-direction:column;}
@@ -104,7 +98,7 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
 
 <div class="main"><div id="out"></div></div>
 
-<div class="footer">NA Coptic League 2026 &nbsp;&middot;&nbsp; Regular Season &nbsp;&middot;&nbsp; May 2026 – July 2026</div>
+
 
 <script>
 /* ─────────────────────────────────────────────
@@ -162,7 +156,7 @@ var GAMES=[
 /* ── Complete team registry (from official division list) ── */
 var TEAMS={
   "JHS":["Astoria","Bayonne 1 (SASA)","Bayonne 2 (VMSJ)","EB (1)","EB (2)","Holmdel","Makkar","Philadelphia","Queens","SI1","SI2","Summit","West Side"],
-  "Girls":["Bayonne 1 (SASA)","Belleville","Brooklyn","EB (1)","EB (2)","Holmdel","Makkar","Queens","SI1","SI2","SI3","Upstate"],
+  "Girls":["Astoria","Bayonne 1 (SASA)","Belleville","Brooklyn","EB (1)","EB (2)","Holmdel","Makkar","Queens","SI1","SI2","SI3","Upstate"],
   "HS-NY":["Astoria","Brooklyn (1)","Brooklyn (2)","Long Island (1)","Long Island (2)","Queens","SI1 (1)","SI1 (2)","SI2 (1)","SI2 (2)"],
   "HS-NJ":["Bayonne 1 (SASA) (1)","Bayonne 1 (SASA) (2)","Bayonne 2 (VMSJ) (1)","Bayonne 2 (VMSJ) (2)","Belleville","EB (1)","EB (2)","EB (3)","Holmdel","Makkar","Philadelphia","Piscataway","Paramus","West Side","Upstate"],
   "College":["Bayonne 1 (SASA)","Bayonne 2 (VMSJ)","Brooklyn","EB (1)","EB (2)","EB (3)","Holmdel","Long Island","Belleville","Philadelphia","Piscataway","Queens","SI1","SI2","Upstate"],
@@ -310,21 +304,11 @@ function render(){
     h+='</tbody></table></div>';
   });
 
-  /* Legend */
-  h+='<div class="legend">';
-  h+='<div class="legend-title">Column Key</div>';
-  h+='<div class="legend-row">';
-  h+='<div class="legend-item"><span>W</span> Wins</div>';
-  h+='<div class="legend-item"><span>L</span> Losses</div>';
-  h+='<div class="legend-item"><span>T</span> Ties</div>';
-  h+='<div class="legend-item"><span>PTS</span> Points (W=2, T=0, L=0)</div>';
-  h+='<div class="legend-item"><span>PF</span> Points For</div>';
-  h+='<div class="legend-item"><span>PA</span> Points Against</div>';
-  h+='<div class="legend-item"><span>PD</span> Point Differential</div>';
-  h+='</div>';
-  h+='<div class="legend-row" style="margin-top:8px;">';
-  h+='<div class="legend-item" style="color:#888;font-size:.65rem;">Tiebreakers: Win Pct → Games Won → PD → PF → PA → Games Lost</div>';
-  h+='</div>';
+  /* Footnote — Abbreviations & Rules */
+  h+='<div class="footnote">';
+  h+='<div class="fn-row"><span>W</span> Wins <span>L</span> Losses <span>T</span> Ties <span>PTS</span> Points <span>PF</span> Points For <span>PA</span> Points Against <span>PD</span> Point Differential</div>';
+  h+='<div class="fn-row" style="margin-top:6px;"><span>Points:</span> Win = 2 · Tie = 0 · Loss = 0</div>';
+  h+='<div class="fn-row"><span>Tiebreakers:</span> Win Pct → Games Won → PD → PF → PA → Games Lost</div>';
   h+='</div>';
 
   out.innerHTML=h;
