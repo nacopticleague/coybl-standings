@@ -5,22 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026 NA Coptic League — Regular Season Standings</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;display:flex;flex-direction:column;}
+body{font-family:Arial,sans-serif;background:#ffffff;min-height:100vh;display:flex;flex-direction:column;}
 
 /* ── Header ── */
 .header{background:#7d1a1a;padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden;}
 .header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#c9b5a5,#e07878,#c9b5a5);}
-.header h1{font-family:'Playfair Display',Georgia,serif;font-size:1.55rem;color:#e8b4b4;font-weight:800;letter-spacing:.02em;}
+.header h1{font-family:Arial,sans-serif;font-size:1.55rem;color:#e8b4b4;font-weight:800;letter-spacing:.02em;}
 .header .sub{font-size:.72rem;color:#c98a8a;margin-top:4px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;}
 
 /* ── Filters ── */
 .filters{background:#d8c8ba;border-bottom:2px solid #b8a492;padding:16px 16px 14px;}
 .filter-row{display:flex;gap:12px;flex-wrap:wrap;max-width:700px;margin:0 auto;}
 .fg{flex:1;min-width:140px;}
-.fg label{display:block;font-size:.68rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;font-family:'Source Sans 3',sans-serif;}
-.fg select{width:100%;padding:9px 12px;border:2px solid #b8a492;border-radius:6px;font-size:.88rem;font-weight:600;color:#5c1010;background:#fff;cursor:pointer;font-family:'Source Sans 3',sans-serif;transition:border-color .2s;}
+.fg label{display:block;font-size:.68rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;font-family:Arial,sans-serif;}
+.fg select{width:100%;padding:9px 12px;border:2px solid #b8a492;border-radius:6px;font-size:.88rem;font-weight:600;color:#5c1010;background:#fff;cursor:pointer;font-family:Arial,sans-serif;transition:border-color .2s;}
 .fg select:focus{outline:none;border-color:#7d1a1a;box-shadow:0 0 0 3px rgba(125,26,26,.15);}
 .fg select:disabled{opacity:.5;cursor:not-allowed;}
 
@@ -30,7 +29,7 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
 /* ── Division block ── */
 .div-block{margin-bottom:28px;}
 .div-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.div-name{font-family:'Playfair Display',Georgia,serif;font-size:1.1rem;font-weight:700;color:#5c1010;white-space:nowrap;}
+.div-name{font-family:Arial,sans-serif;font-size:1.1rem;font-weight:700;color:#5c1010;white-space:nowrap;}
 .div-count{font-size:.7rem;font-weight:700;color:#fff;background:#7d1a1a;padding:2px 9px;border-radius:10px;white-space:nowrap;}
 .div-line{flex:1;height:1px;background:#b8a492;}
 
@@ -45,7 +44,7 @@ body{font-family:'Source Sans 3',sans-serif;background:#ffffff;min-height:100vh;
 .standings-table tbody tr:not(:last-child) td{border-bottom:1px solid #eee4dc;}
 
 .standings-table tbody td{padding:10px 8px;text-align:center;font-size:.85rem;color:#333;}
-.standings-table tbody td:first-child{text-align:center;padding-left:14px;font-weight:700;color:#7d1a1a;font-family:'Playfair Display',Georgia,serif;font-size:.9rem;}
+.standings-table tbody td:first-child{text-align:center;padding-left:14px;font-weight:700;color:#7d1a1a;font-family:Arial,sans-serif;font-size:.9rem;}
 .standings-table tbody td:nth-child(2){text-align:left;padding-left:0;font-weight:700;color:#222;}
 
 /* Highlight top row */
