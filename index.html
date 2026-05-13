@@ -101,6 +101,7 @@ body{font-family:Arial,sans-serif;background:#ffffff;min-height:100vh;display:fl
   <div><span>W</span> Wins <span>L</span> Losses <span>T</span> Ties <span>PTS</span> Points <span>PF</span> Points For <span>PA</span> Points Against <span>PD</span> Point Differential</div>
   <div style="margin-top:6px;"><span>Points:</span> Win = 2 · Tie = 0 · Loss = 0</div>
   <div><span>Tiebreakers:</span> Win Pct → Games Won → PD → PF → PA → Games Lost</div>
+  <div><span>Win Cap:</span> Point differential capped at 25 per game</div>
 </div>
 
 
@@ -186,6 +187,7 @@ var DIV_ORDER=["JHS","Girls","HS-NY","HS-NJ","College","Mens"];
 
 /* Points awarded */
 var PTS_WIN=2, PTS_TIE=0, PTS_LOSS=0;
+var WIN_CAP=25; /* max point differential per game */
 
 /* ── Build standings from scored games ── */
 function calcStandings(){
@@ -212,8 +214,13 @@ function calcStandings(){
     var a=ensure(g.t1,g.div);
     var b=ensure(g.t2,g.div);
 
-    a.pf+=g.s1; a.pa+=g.s2;
-    b.pf+=g.s2; b.pa+=g.s1;
+    /* Cap winning score so differential never exceeds WIN_CAP */
+    var cs1=g.s1, cs2=g.s2;
+    if(cs1>cs2&&cs1-cs2>WIN_CAP)cs1=cs2+WIN_CAP;
+    if(cs2>cs1&&cs2-cs1>WIN_CAP)cs2=cs1+WIN_CAP;
+
+    a.pf+=cs1; a.pa+=cs2;
+    b.pf+=cs2; b.pa+=cs1;
 
     if(g.s1>g.s2){
       a.w++; b.l++;
