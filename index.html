@@ -149,6 +149,12 @@ var TEAMS = {
   "Mens":    ["Bayonne 1 (SASA)","EB","Hatfield","Holmdel","Long Island","SI1","SI2","Summit","Queens"]
 };
 
+/* Teams that dropped out mid-season — hidden from standings, but their
+   already-played games still count for their opponents' W/L records. */
+var DROPPED_TEAMS = {
+  "JHS": ["Brooklyn"]
+};
+
 var DIV_LABELS = {"HS-NY":"High School · NY","HS-NJ":"High School · NJ","JHS":"Junior High School","Girls":"Girls","College":"College","Mens":"Mens"};
 var DIV_ORDER  = ["JHS","Girls","HS-NY","HS-NJ","College","Mens"];
 
@@ -231,6 +237,13 @@ function calcStandings(){
   });
 
   var list = Object.values(teams);
+
+  /* Filter out dropped teams (their games already credited to opponents) */
+  list = list.filter(function(t){
+    var dropped = DROPPED_TEAMS[t.div];
+    return !dropped || dropped.indexOf(t.name) === -1;
+  });
+
   list.forEach(function(t){
     var gp = t.w + t.l + t.t;
     t.gp   = gp;
