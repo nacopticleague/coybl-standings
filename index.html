@@ -190,9 +190,15 @@ function loadGames(){
 function calcStandings(){
   var teams = {};
 
+  /* Normalize team name so "Foo", "Foo ", "Foo  Bar" all merge into one entry */
+  function normName(s){
+    return String(s || '').trim().replace(/\s+/g, ' ');
+  }
+
   function ensure(name, div){
-    var key = div + '||' + name;
-    if(!teams[key]) teams[key] = { name:name, div:div, w:0, l:0, t:0, pf:0, pa:0, results:[] };
+    var clean = normName(name);
+    var key = div + '||' + clean.toLowerCase();
+    if(!teams[key]) teams[key] = { name:clean, div:div, w:0, l:0, t:0, pf:0, pa:0, results:[] };
     return teams[key];
   }
 
@@ -241,7 +247,12 @@ function calcStandings(){
   /* Filter out dropped teams (their games already credited to opponents) */
   list = list.filter(function(t){
     var dropped = DROPPED_TEAMS[t.div];
-    return !dropped || dropped.indexOf(t.name) === -1;
+    if(!dropped) return true;
+    var nameLower = t.name.toLowerCase();
+    for(var i = 0; i < dropped.length; i++){
+      if(normName(dropped[i]).toLowerCase() === nameLower) return false;
+    }
+    return true;
   });
 
   list.forEach(function(t){
