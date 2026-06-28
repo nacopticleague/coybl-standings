@@ -146,28 +146,28 @@ function parseCSV(csvText){
   var headers=lines[0].split(',').map(function(h){return h.trim().replace(/"/g,'').toLowerCase();});
 
   /* Find column indices */
-  var iDiv=-1,iWin=-1,iLose=-1,iWPts=-1,iLPts=-1,iDate=-1;
+  var iT1=-1,iT2=-1,iDiv=-1,iDate=-1,iWinner=-1,iS1=-1,iS2=-1;
   headers.forEach(function(h,idx){
-    if(h==='division')iDiv=idx;
-    else if(h.indexOf('winning team')===0&&h.indexOf('point')===-1)iWin=idx;
-    else if(h.indexOf('losing team')===0&&h.indexOf('point')===-1)iLose=idx;
-    else if(h.indexOf('winning')>=0&&h.indexOf('point')>=0)iWPts=idx;
-    else if(h.indexOf('losing')>=0&&h.indexOf('point')>=0)iLPts=idx;
-    else if(h.indexOf('date')>=0&&h.indexOf('submission')===-1)iDate=idx;
+    if(h==='team 1')iT1=idx;
+    else if(h==='team 2')iT2=idx;
+    else if(h==='division')iDiv=idx;
+    else if(h==='date')iDate=idx;
+    else if(h==='winner')iWinner=idx;
+    else if(h==='score 1')iS1=idx;
+    else if(h==='score 2')iS2=idx;
   });
 
   var games=[];
   for(var r=1;r<lines.length;r++){
     var cols=parseCSVRow(lines[r]);
-    if(cols.length<Math.max(iDiv,iWin,iLose,iWPts,iLPts)+1)continue;
+    var t1=cols[iT1]?cols[iT1].trim().replace(/"/g,''):'';
+    var t2=cols[iT2]?cols[iT2].trim().replace(/"/g,''):'';
     var div=cols[iDiv]?cols[iDiv].trim().replace(/"/g,''):'';
-    var wTeam=cols[iWin]?cols[iWin].trim().replace(/"/g,''):'';
-    var lTeam=cols[iLose]?cols[iLose].trim().replace(/"/g,''):'';
-    var wPts=parseInt(cols[iWPts],10);
-    var lPts=parseInt(cols[iLPts],10);
-    if(!div||!wTeam||!lTeam||isNaN(wPts)||isNaN(lPts))continue;
+    var s1=parseInt(cols[iS1],10);
+    var s2=parseInt(cols[iS2],10);
+    if(!t1||!t2||!div||isNaN(s1)||isNaN(s2))continue;
     var dt=cols[iDate]?cols[iDate].trim().replace(/"/g,''):'';
-    games.push({t1:wTeam,t2:lTeam,div:div,date:dt,s1:wPts,s2:lPts});
+    games.push({t1:t1,t2:t2,div:div,date:dt,s1:s1,s2:s2});
   }
   return games;
 }
