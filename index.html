@@ -108,13 +108,13 @@ body{font-family:Arial,sans-serif;background:#ffffff;min-height:100vh;display:fl
 <div class="footnote">
   <div><span>W</span> Wins <span>L</span> Losses <span>T</span> Ties <span>PTS</span> Points <span>PF</span> Points For <span>PA</span> Points Against <span>PD</span> Point Differential</div>
   <div style="margin-top:6px;"><span>Points:</span> Win = 2 · Tie = 0 · Loss = 0</div>
-  <div><span>Tiebreakers:</span> Win Pct → Games Won → PD → PF → PA → Games Lost</div>
+  <div><span>Tiebreakers:</span> Win Pct → Head-to-Head → Point Differential</div>
   <div><span>Win Cap:</span> Point differential capped at 25 per game</div>
 </div>
 
 <script>
-/* ── Google Sheet CSV URL (GAMES tab) ── */
-var SHEET_CSV="https://docs.google.com/spreadsheets/d/1aYDxSEu7Q1r9KzVstlMN45dJRPaBpY2Ca6M_YGqTvoM/gviz/tq?tqx=out:csv&gid=147422759";
+/* ── Google Sheet via Apps Script (handles CORS) ── */
+var SHEET_CSV="https://script.google.com/macros/s/AKfycbxk2kzxtjmwgDb_Ae-uVRlbVi5LrRGQBgUgVlKJFBJIB36wsTZ5hVn0W0R-Q80p6kdR/exec?sheet=GAMES";
 
 /* ── All games cache ── */
 var ALL_GAMES=null;
@@ -186,6 +186,8 @@ function parseCSVRow(row){
 }
 
 /* ── Build standings ── */
+var DIV_GAMES=[]; /* stored for head-to-head lookup */
+
 function calcStandings(games,div){
   var teams={};
 
@@ -197,8 +199,11 @@ function calcStandings(games,div){
   /* Register all teams from roster */
   if(TEAMS[div])TEAMS[div].forEach(function(name){ensure(name);});
 
-  /* Process games for this division only */
-  games.filter(function(g){return g.div===div;}).forEach(function(g){
+  /* Filter games for this division and store for H2H */
+  DIV_GAMES=games.filter(function(g){return g.div===div;});
+
+  /* Process games */
+  DIV_GAMES.forEach(function(g){
     var a=ensure(g.t1);
     var b=ensure(g.t2);
 
@@ -230,15 +235,38 @@ function calcStandings(games,div){
   return list;
 }
 
-/* ── CHMeetings tiebreaker sort ── */
+/* ── Head-to-head lookup ──
+   Returns: 1 if teamA beat teamB, -1 if teamB beat teamA, 0 if split/never played */
+function headToHead(nameA,nameB){
+  var aWins=0,bWins=0;
+  DIV_GAMES.forEach(function(g){
+    if(g.t1===nameA&&g.t2===nameB){
+      if(g.s1>g.s2)aWins++;else if(g.s2>g.s1)bWins++;
+    }else if(g.t1===nameB&&g.t2===nameA){
+      if(g.s1>g.s2)bWins++;else if(g.s2>g.s1)aWins++;
+    }
+  });
+  if(aWins>bWins)return 1;
+  if(bWins>aWins)return -1;
+  return 0;
+}
+
+/* ── Tiebreaker sort ──
+   1. Winning Pct (highest)
+   2. Head-to-head (if they played each other)
+   3. Point differential (if they didn't play or split)
+   ───────────────────── */
 function sortTeams(arr){
   return arr.sort(function(a,b){
+    /* 1. Win Pct */
     if(b.pct!==a.pct)return b.pct-a.pct;
-    if(b.w!==a.w)return b.w-a.w;
-    if(b.diff!==a.diff)return b.diff-a.diff;
-    if(b.pf!==a.pf)return b.pf-a.pf;
-    if(a.pa!==b.pa)return a.pa-b.pa;
-    return a.l-b.l;
+
+    /* 2. Head-to-head */
+    var h2h=headToHead(a.name,b.name);
+    if(h2h!==0)return -h2h; /* positive = A wins H2H, so A ranks higher (lower index) */
+
+    /* 3. Point differential */
+    return b.diff-a.diff;
   });
 }
 
