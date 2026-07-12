@@ -200,9 +200,21 @@ function calcStandings(games,div){
   if(TEAMS[div])TEAMS[div].forEach(function(name){ensure(name);});
 
   /* Filter games for this division — EXCLUDE playoffs (after July 10, 2026) */
-  var REG_SEASON_CUTOFF="2026-07-10";
+  function parseDate(d){
+    if(!d)return null;
+    /* Handle MM-DD-YYYY, MM/DD/YYYY, or YYYY-MM-DD */
+    var parts;
+    if(d.indexOf('/')>=0)parts=d.split('/');
+    else if(d.match(/^\d{2}-\d{2}-\d{4}/))parts=d.split('-');
+    else return new Date(d+'T12:00:00'); /* YYYY-MM-DD */
+    return new Date(+parts[2],+parts[0]-1,+parts[1]);
+  }
+  var CUTOFF=new Date(2026,6,10); /* July 10, 2026 (month is 0-indexed) */
+
   DIV_GAMES=games.filter(function(g){
-    return g.div===div&&g.date<=REG_SEASON_CUTOFF;
+    if(g.div!==div)return false;
+    var gd=parseDate(g.date);
+    return gd&&gd<=CUTOFF;
   });
 
   /* Process games */
