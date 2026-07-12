@@ -3,93 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 NA Coptic League — Regular Season Standings</title>
+<title>2026 NA Coptic League — Playoff Brackets</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#ffffff;min-height:100vh;display:flex;flex-direction:column;}
+body{font-family:Arial,sans-serif;background:#fff;min-height:100vh;overflow-x:hidden;}
 
 /* ── Header ── */
-.header{background:#7d1a1a;padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden;}
+.header{background:#7d1a1a;padding:18px 20px 16px;text-align:center;position:relative;overflow:hidden;}
 .header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#c9b5a5,#e07878,#c9b5a5);}
 .header h1{font-family:Arial,sans-serif;font-size:1.55rem;color:#e8b4b4;font-weight:800;letter-spacing:.02em;}
 .header .sub{font-size:.72rem;color:#c98a8a;margin-top:4px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;}
 
 /* ── Filters ── */
 .filters{background:#d8c8ba;border-bottom:2px solid #b8a492;padding:16px 16px 14px;}
-.filter-row{display:flex;gap:12px;flex-wrap:wrap;max-width:700px;margin:0 auto;}
+.filter-row{display:flex;gap:12px;flex-wrap:wrap;max-width:900px;margin:0 auto;}
 .fg{flex:1;min-width:140px;}
-.fg label{display:block;font-size:.68rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;font-family:Arial,sans-serif;}
-.fg select{width:100%;padding:9px 12px;border:2px solid #b8a492;border-radius:6px;font-size:.88rem;font-weight:600;color:#5c1010;background:#fff;cursor:pointer;font-family:Arial,sans-serif;transition:border-color .2s;}
+.fg label{display:block;font-size:.68rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.fg select{width:100%;padding:9px 12px;border:2px solid #b8a492;border-radius:6px;font-size:.88rem;font-weight:600;color:#5c1010;background:#fff;cursor:pointer;font-family:Arial,sans-serif;}
 .fg select:focus{outline:none;border-color:#7d1a1a;box-shadow:0 0 0 3px rgba(125,26,26,.15);}
-.fg select:disabled{opacity:.5;cursor:not-allowed;}
 
 /* ── Main ── */
-.main{max-width:700px;margin:0 auto;padding:20px 14px 40px;flex:1;width:100%;}
+.main{max-width:900px;margin:0 auto;padding:20px 14px 40px;overflow:hidden;}
 
-/* ── Division block ── */
-.div-block{margin-bottom:28px;}
-.div-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.div-name{font-family:Arial,sans-serif;font-size:1.1rem;font-weight:700;color:#5c1010;white-space:nowrap;}
-.div-count{font-size:.7rem;font-weight:700;color:#fff;background:#7d1a1a;padding:2px 9px;border-radius:10px;white-space:nowrap;}
-.div-line{flex:1;height:1px;background:#b8a492;}
+/* ── Bracket ── */
+.bracket-scale{transform-origin:top left;width:760px;}
+.bracket-wrapper{min-width:760px;padding:10px 0;}
+.round-labels{display:flex;margin-bottom:8px;}
+.round-labels span{flex:1;text-align:center;font-size:.7rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.08em;}
 
-/* ── Table ── */
-.standings-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(80,20,20,.08);overflow:hidden;border:1px solid #eee4dc;}
-.standings-table thead th{font-size:.65rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.08em;padding:11px 8px 9px;background:#f0e6dd;border-bottom:2px solid #d8c8ba;text-align:center;white-space:nowrap;}
-.standings-table thead th:first-child{text-align:center;padding-left:14px;width:30px;}
-.standings-table thead th:nth-child(2){text-align:left;padding-left:0;}
+.bracket{display:flex;align-items:stretch;position:relative;}
+.round{display:flex;flex-direction:column;justify-content:space-around;flex:1;padding:0 6px;}
 
-.standings-table tbody tr{transition:background .15s;}
-.standings-table tbody tr:hover{background:#faf6f2;}
-.standings-table tbody tr:not(:last-child) td{border-bottom:1px solid #eee4dc;}
+/* ── Matchup card ── */
+.matchup{background:#fff;border:1.5px solid #d8c8ba;border-radius:6px;margin:6px 0;overflow:hidden;box-shadow:0 1px 4px rgba(80,20,20,.06);}
+.matchup.decided .team.winner{background:#fdf8f4;}
+.team{display:flex;align-items:center;padding:6px 10px;gap:8px;border-bottom:1px solid #f0e6dd;font-size:.78rem;color:#555;font-weight:600;}
+.team:last-child{border-bottom:none;}
+.team .seed{font-size:.6rem;font-weight:700;color:#fff;background:#7d1a1a;padding:1px 5px;border-radius:3px;min-width:20px;text-align:center;}
+.team .name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.team .score{font-weight:700;color:#888;min-width:22px;text-align:right;font-size:.82rem;}
+.team.winner .name{color:#5c1010;font-weight:800;}
+.team.winner .score{color:#7d1a1a;font-weight:800;}
+.team.tbd .name{color:#bbb;font-style:italic;}
 
-.standings-table tbody td{padding:10px 8px;text-align:center;font-size:.85rem;color:#333;}
-.standings-table tbody td:first-child{text-align:center;padding-left:14px;font-weight:700;color:#7d1a1a;font-family:Arial,sans-serif;font-size:.9rem;}
-.standings-table tbody td:nth-child(2){text-align:left;padding-left:0;font-weight:700;color:#222;}
+/* ── Champion box ── */
+.champion-box{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:110px;padding:12px 8px;}
+.trophy{font-size:2rem;margin-bottom:4px;}
+.champ-label{font-size:.6rem;font-weight:700;color:#5c1010;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+.champ-name{font-size:.85rem;font-weight:800;color:#7d1a1a;text-align:center;}
 
-/* Highlight top row */
-.standings-table tbody tr.rank-1 td{background:#fdf8f4;}
-.standings-table tbody tr.rank-1 td:first-child{position:relative;}
-.standings-table tbody tr.rank-1 td:first-child::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:#7d1a1a;border-radius:0 2px 2px 0;}
+/* ── Connectors ── */
+.round .matchup{position:relative;}
 
-/* W/L/PTS colors */
-.w-col{color:#1a6b1a !important;font-weight:700 !important;}
-.l-col{color:#a22 !important;font-weight:700 !important;}
-.pts-col{color:#7d1a1a !important;font-weight:800 !important;font-size:.9rem !important;}
-.diff-pos{color:#1a6b1a !important;font-weight:600 !important;}
-.diff-neg{color:#a22 !important;font-weight:600 !important;}
-
-/* ── Footnote ── */
-.footnote{max-width:700px;margin:0 auto;padding:12px 16px;font-size:.68rem;color:#777;line-height:1.7;width:100%;}
-.footnote span{color:#5c1010;font-weight:700;}
-
-/* ── Seed badge ── */
-.seed-badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:4px;background:#7d1a1a;color:#fff;margin-left:6px;vertical-align:middle;letter-spacing:.02em;}
-
-/* ── Loading ── */
-.loading{text-align:center;padding:48px 24px;color:#888;font-size:.9rem;}
+/* ── Gold styling for Finals ── */
+.round.finals .matchup{border-color:#C5963A;background:linear-gradient(135deg,#FFFDF5,#FFF8E7);}
+.round.finals .team.winner .name{color:#6B4F0A;}
+.round.finals .team.winner .score{color:#8B6914;}
+.round.finals .team .seed{background:linear-gradient(135deg,#C5963A,#E8C252);color:#3d2600;}
+.champion-box .champ-name{color:#7d1a1a;}
+.champion-box.has-champ{background:linear-gradient(135deg,#FFFDF5,#FFF8E7);border:1.5px solid #C5963A;border-radius:6px;}
 
 @media(max-width:520px){
   .filter-row{flex-direction:column;}
   .fg{min-width:100%;}
-  .standings-table{font-size:.78rem;}
-  .standings-table thead th{padding:9px 5px 7px;font-size:.6rem;}
-  .standings-table tbody td{padding:8px 5px;font-size:.8rem;}
+  .header h1{font-size:1.3rem;}
+  .main{padding:12px 6px 30px;}
+  .team{padding:5px 8px;font-size:.72rem;}
+  .team .seed{font-size:.55rem;padding:1px 4px;}
 }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>2026 Regular Season — Standings</h1>
-  <div class="sub">NA Coptic League &middot; May – July 2026</div>
+  <h1>2026 Playoff Brackets</h1>
+  <div class="sub">NA Coptic League &middot; July 2026</div>
 </div>
 
 <div class="filters">
   <div class="filter-row">
     <div class="fg">
       <label>Division</label>
-      <select id="fdiv" onchange="loadDivision()">
+      <select id="fdiv" onchange="renderBracket()">
         <option value="JHS">Junior High School (JHS)</option>
         <option value="Girls">Girls</option>
         <option value="HS-NY">High School — NY</option>
@@ -101,273 +96,164 @@ body{font-family:Arial,sans-serif;background:#ffffff;min-height:100vh;display:fl
   </div>
 </div>
 
-<div class="main"><div id="out">
-  <div class="loading">Loading standings&hellip; One moment.</div>
-</div></div>
-
-<div class="footnote">
-  <div><span>W</span> Wins <span>L</span> Losses <span>T</span> Ties <span>PTS</span> Points <span>PF</span> Points For <span>PA</span> Points Against <span>PD</span> Point Differential</div>
-  <div style="margin-top:6px;"><span>Points:</span> Win = 2 · Tie = 0 · Loss = 0</div>
-  <div><span>Tiebreakers:</span> Win Pct → Head-to-Head → Point Differential</div>
-  <div><span>Win Cap:</span> Point differential capped at 25 per game</div>
-</div>
+<div class="main"><div id="out"></div></div>
 
 <script>
-/* ── Google Sheet CSV — direct fetch (no Apps Script needed) ── */
-var SHEET_CSV="https://docs.google.com/spreadsheets/d/1aYDxSEu7Q1r9KzVstlMN45dJRPaBpY2Ca6M_YGqTvoM/gviz/tq?tqx=out:csv&gid=147422759";
-
-/* ── All games cache ── */
-var ALL_GAMES=null;
-
-/* ── Complete team registry ── */
-var TEAMS={
-  "JHS":["Astoria","Bayonne 1 (SASA)","Bayonne 2 (VMSJ)","EB (1)","EB (2)","Holmdel","Makkar","Philadelphia","Queens","SI1","SI2","Summit","West Side"],
-  "Girls":["Astoria","Bayonne 1 (SASA)","Belleville","Brooklyn","EB (1)","EB (2)","Holmdel","Makkar","Queens","SI1","SI2","SI3","Upstate"],
-  "HS-NY":["Astoria","Brooklyn (1)","Brooklyn (2)","Long Island (1)","Long Island (2)","Queens","SI1 (1)","SI1 (2)","SI2 (1)","SI2 (2)"],
-  "HS-NJ":["Bayonne 1 (SASA) (1)","Bayonne 1 (SASA) (2)","Bayonne 2 (VMSJ) (1)","Bayonne 2 (VMSJ) (2)","Belleville","EB (1)","EB (2)","EB (3)","Holmdel","Makkar","Philadelphia","Piscataway","Paramus","West Side","Upstate"],
-  "College":["Bayonne 1 (SASA)","Bayonne 2 (VMSJ)","Brooklyn","EB (1)","EB (2)","EB (3)","Holmdel","Long Island","Belleville","Philadelphia","Piscataway","Queens","SI1","SI2","Upstate"],
-  "Mens":["Bayonne 1 (SASA)","EB","Hatfield","Holmdel","Long Island","SI1","SI2","Summit","Queens"]
+/* ── Bracket seedings from final regular season standings ── */
+var BRACKETS={
+  "JHS":{
+    seeds:["Queens","SI1","EB (1)","Makkar","Summit","SI2","West Side","Holmdel"],
+    /* results: [firstRound x4, semis x2, final x1] — null = not played */
+    /* Each result: [score1, score2] where score1=higher seed */
+    results:[null,null,null,null,null,null,null]
+  },
+  "Girls":{
+    seeds:["EB (1)","Queens","SI1","Holmdel","Belleville","Bayonne 1 (SASA)","Makkar","EB (2)"],
+    results:[null,null,null,null,null,null,null]
+  },
+  "HS-NY":{
+    seeds:["Queens","Astoria","Brooklyn (1)","SI1 (1)","Long Island (1)","SI1 (2)","SI2 (2)","SI2 (1)"],
+    results:[null,null,null,null,null,null,null]
+  },
+  "HS-NJ":{
+    seeds:["EB (1)","Makkar","Holmdel","EB (2)","Upstate","Philadelphia","West Side","Bayonne 1 (SASA) (2)"],
+    results:[null,null,null,null,null,null,null]
+  },
+  "College":{
+    seeds:["SI1","EB (1)","Philadelphia","Holmdel","Brooklyn","Bayonne 1 (SASA)","EB (2)","Queens"],
+    results:[null,null,null,null,null,null,null]
+  },
+  "Mens":{
+    seeds:["Long Island","EB","Summit","Queens","Holmdel","SI2","SI1","Bayonne 1 (SASA)"],
+    results:[null,null,null,null,null,null,null]
+  }
 };
 
-var DIV_LABELS={"HS-NY":"High School · NY","HS-NJ":"High School · NJ","JHS":"Junior High School","Girls":"Girls","College":"College","Mens":"Mens"};
-var DIV_ORDER=["JHS","Girls","HS-NY","HS-NJ","College","Mens"];
+/* ── Standard 8-team bracket order: 1v8, 4v5, 3v6, 2v7 ── */
+var MATCHUP_ORDER=[[0,7],[3,4],[2,5],[1,6]]; /* seed indices */
 
-/* Seed badges: top N teams per division */
-var SEED_DIVS={"JHS":8,"Girls":8,"HS-NY":8,"HS-NJ":8,"College":8,"Mens":8};
-
-/* Points & cap */
-var PTS_WIN=2, PTS_TIE=0, PTS_LOSS=0;
-var WIN_CAP=25;
-
-/* ── Parse CSV text into game objects ── */
-function parseCSV(csvText){
-  var lines=csvText.trim().split('\n');
-  if(lines.length<2)return [];
-  var headers=lines[0].split(',').map(function(h){return h.trim().replace(/"/g,'').toLowerCase();});
-
-  /* Find column indices */
-  var iT1=-1,iT2=-1,iDiv=-1,iDate=-1,iWinner=-1,iS1=-1,iS2=-1;
-  headers.forEach(function(h,idx){
-    if(h==='team 1')iT1=idx;
-    else if(h==='team 2')iT2=idx;
-    else if(h==='division')iDiv=idx;
-    else if(h==='date')iDate=idx;
-    else if(h==='winner')iWinner=idx;
-    else if(h==='score 1')iS1=idx;
-    else if(h==='score 2')iS2=idx;
-  });
-
-  var games=[];
-  for(var r=1;r<lines.length;r++){
-    var cols=parseCSVRow(lines[r]);
-    var t1=cols[iT1]?cols[iT1].trim().replace(/"/g,''):'';
-    var t2=cols[iT2]?cols[iT2].trim().replace(/"/g,''):'';
-    var div=cols[iDiv]?cols[iDiv].trim().replace(/"/g,''):'';
-    var s1=parseInt(cols[iS1],10);
-    var s2=parseInt(cols[iS2],10);
-    if(!t1||!t2||!div||isNaN(s1)||isNaN(s2))continue;
-    var dt=cols[iDate]?cols[iDate].trim().replace(/"/g,''):'';
-    games.push({t1:t1,t2:t2,div:div,date:dt,s1:s1,s2:s2});
-  }
-  return games;
+function getWinner(result,teamA,teamB){
+  if(!result)return null;
+  return result[0]>result[1]?teamA:result[1]>result[0]?teamB:null;
 }
 
-/* Handle quoted CSV fields */
-function parseCSVRow(row){
-  var cols=[];var cur='';var inQ=false;
-  for(var i=0;i<row.length;i++){
-    var c=row[i];
-    if(c==='"'){inQ=!inQ;}
-    else if(c===','&&!inQ){cols.push(cur);cur='';}
-    else{cur+=c;}
-  }
-  cols.push(cur);
-  return cols;
-}
-
-/* ── Build standings ── */
-var DIV_GAMES=[]; /* stored for head-to-head lookup */
-
-function calcStandings(games,div){
-  var teams={};
-
-  function ensure(name){
-    if(!teams[name])teams[name]={name:name,div:div,w:0,l:0,t:0,pf:0,pa:0};
-    return teams[name];
-  }
-
-  /* Register all teams from roster */
-  if(TEAMS[div])TEAMS[div].forEach(function(name){ensure(name);});
-
-  /* Filter games for this division — EXCLUDE playoffs (after July 10, 2026) */
-  function parseDate(d){
-    if(!d)return null;
-    /* Handle MM-DD-YYYY, MM/DD/YYYY, or YYYY-MM-DD */
-    var parts;
-    if(d.indexOf('/')>=0)parts=d.split('/');
-    else if(d.match(/^\d{2}-\d{2}-\d{4}/))parts=d.split('-');
-    else return new Date(d+'T12:00:00'); /* YYYY-MM-DD */
-    return new Date(+parts[2],+parts[0]-1,+parts[1]);
-  }
-  var CUTOFF=new Date(2026,6,10); /* July 10, 2026 (month is 0-indexed) */
-
-  DIV_GAMES=games.filter(function(g){
-    if(g.div!==div)return false;
-    var gd=parseDate(g.date);
-    return gd&&gd<=CUTOFF;
-  });
-
-  /* Process games */
-  DIV_GAMES.forEach(function(g){
-    var a=ensure(g.t1);
-    var b=ensure(g.t2);
-
-    /* Cap winning differential at WIN_CAP */
-    var cs1=g.s1, cs2=g.s2;
-    if(cs1>cs2&&cs1-cs2>WIN_CAP)cs1=cs2+WIN_CAP;
-    if(cs2>cs1&&cs2-cs1>WIN_CAP)cs2=cs1+WIN_CAP;
-
-    a.pf+=cs1; a.pa+=cs2;
-    b.pf+=cs2; b.pa+=cs1;
-
-    if(g.s1>g.s2){
-      a.w++; b.l++;
-    }else if(g.s2>g.s1){
-      b.w++; a.l++;
-    }else{
-      a.t++; b.t++;
-    }
-  });
-
-  var list=Object.values(teams);
-  list.forEach(function(t){
-    var gp=t.w+t.l+t.t;
-    t.gp=gp;
-    t.pct=gp?t.w/gp:0;
-    t.diff=t.pf-t.pa;
-    t.pts=t.w*PTS_WIN+t.t*PTS_TIE+t.l*PTS_LOSS;
-  });
-  return list;
-}
-
-/* ── Head-to-head lookup ──
-   Returns: 1 if teamA beat teamB, -1 if teamB beat teamA, 0 if split/never played */
-function headToHead(nameA,nameB){
-  var aWins=0,bWins=0;
-  DIV_GAMES.forEach(function(g){
-    if(g.t1===nameA&&g.t2===nameB){
-      if(g.s1>g.s2)aWins++;else if(g.s2>g.s1)bWins++;
-    }else if(g.t1===nameB&&g.t2===nameA){
-      if(g.s1>g.s2)bWins++;else if(g.s2>g.s1)aWins++;
-    }
-  });
-  if(aWins>bWins)return 1;
-  if(bWins>aWins)return -1;
-  return 0;
-}
-
-/* ── Tiebreaker sort ──
-   1. Winning Pct (highest)
-   2. Head-to-head (if they played each other)
-   3. Point differential (if they didn't play or split)
-   ───────────────────── */
-function sortTeams(arr){
-  return arr.sort(function(a,b){
-    /* 1. Win Pct */
-    if(b.pct!==a.pct)return b.pct-a.pct;
-
-    /* 2. Head-to-head */
-    var h2h=headToHead(a.name,b.name);
-    if(h2h!==0)return -h2h; /* positive = A wins H2H, so A ranks higher (lower index) */
-
-    /* 3. Point differential */
-    return b.diff-a.diff;
-  });
-}
-
-/* ── Fetch all games once, then render ── */
-function fetchAllGames(){
-  var out=document.getElementById('out');
-  out.innerHTML='<div class="loading">Loading standings&hellip; One moment.</div>';
-
-  fetch(SHEET_CSV)
-    .then(function(r){return r.text();})
-    .then(function(csv){
-      ALL_GAMES=parseCSV(csv);
-      renderDivision();
-    })
-    .catch(function(err){
-      out.innerHTML='<div class="loading">Error loading data. Please try again.</div>';
-      console.error(err);
-    });
-}
-
-/* ── Filter & render selected division ── */
-function renderDivision(){
-  if(!ALL_GAMES)return;
+function renderBracket(){
   var div=document.getElementById('fdiv').value;
-  var teams=calcStandings(ALL_GAMES,div);
-  renderStandings(teams,div);
-}
+  var b=BRACKETS[div];
+  if(!b){document.getElementById('out').innerHTML='';return;}
 
-/* ── Called when dropdown changes ── */
-function loadDivision(){
-  if(ALL_GAMES){
-    renderDivision();
-  }else{
-    fetchAllGames();
-  }
-}
+  var seeds=b.seeds;
+  var res=b.results;
 
-/* ── Render standings table ── */
-function renderStandings(allTeams,div){
-  var out=document.getElementById('out');
-  var teams=sortTeams(allTeams);
-  var seedCount=SEED_DIVS[div]||0;
-
-  var h='<div class="div-block">';
-  h+='<div class="div-header"><span class="div-name">'+DIV_LABELS[div]+'</span><span class="div-count">'+teams.length+' teams</span><div class="div-line"></div></div>';
-
-  h+='<table class="standings-table"><thead><tr>';
-  h+='<th>#</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PTS</th><th>PF</th><th>PA</th><th>PD</th>';
-  h+='</tr></thead><tbody>';
-
-  teams.forEach(function(t,i){
-    var rank=i+1;
-    var cls=rank===1?' class="rank-1"':'';
-    var diffStr=t.diff>0?'+'+t.diff:t.diff===0?'0':''+t.diff;
-    var diffCls=t.diff>0?'diff-pos':t.diff<0?'diff-neg':'';
-
-    var seedBadge='';
-    if(seedCount&&rank<=seedCount){
-      seedBadge=' <span class="seed-badge">#'+rank+'</span>';
-    }
-
-    h+='<tr'+cls+'>';
-    h+='<td>'+rank+'</td>';
-    h+='<td>'+t.name+seedBadge+'</td>';
-    h+='<td class="w-col">'+t.w+'</td>';
-    h+='<td class="l-col">'+t.l+'</td>';
-    h+='<td>'+t.t+'</td>';
-    h+='<td class="pts-col">'+t.pts+'</td>';
-    h+='<td>'+t.pf+'</td>';
-    h+='<td>'+t.pa+'</td>';
-    h+='<td class="'+diffCls+'">'+diffStr+'</td>';
-    h+='</tr>';
+  /* First round matchups */
+  var fr=[];
+  MATCHUP_ORDER.forEach(function(pair,i){
+    var tA={name:seeds[pair[0]],seed:pair[0]+1};
+    var tB={name:seeds[pair[1]],seed:pair[1]+1};
+    var r=res[i];
+    var winner=r?getWinner(r,tA,tB):null;
+    fr.push({teamA:tA,teamB:tB,scoreA:r?r[0]:null,scoreB:r?r[1]:null,winner:winner});
   });
 
-  h+='</tbody></table></div>';
-  out.innerHTML=h;
+  /* Semis */
+  var sf=[];
+  for(var s=0;s<2;s++){
+    var w1=fr[s*2].winner;
+    var w2=fr[s*2+1].winner;
+    var tA=w1||{name:'TBD',seed:null};
+    var tB=w2||{name:'TBD',seed:null};
+    var r=res[4+s];
+    var winner=r&&w1&&w2?getWinner(r,tA,tB):null;
+    sf.push({teamA:tA,teamB:tB,scoreA:r?r[0]:null,scoreB:r?r[1]:null,winner:winner});
+  }
+
+  /* Final */
+  var fw1=sf[0].winner;
+  var fw2=sf[1].winner;
+  var fA=fw1||{name:'TBD',seed:null};
+  var fB=fw2||{name:'TBD',seed:null};
+  var fRes=res[6];
+  var finalWinner=fRes&&fw1&&fw2?getWinner(fRes,fA,fB):null;
+  var finalGame={teamA:fA,teamB:fB,scoreA:fRes?fRes[0]:null,scoreB:fRes?fRes[1]:null,winner:finalWinner};
+
+  /* Build HTML */
+  var h='<div class="bracket-scale" id="bracket-scale"><div class="bracket-wrapper">';
+
+  /* Round labels */
+  h+='<div class="round-labels"><span>First Round</span><span>Semifinals</span><span>Championship</span><span></span></div>';
+
+  h+='<div class="bracket">';
+
+  /* Round 1 */
+  h+='<div class="round r1">';
+  fr.forEach(function(m){h+=matchupHTML(m);});
+  h+='</div>';
+
+  /* Semis */
+  h+='<div class="round r2">';
+  sf.forEach(function(m){h+=matchupHTML(m);});
+  h+='</div>';
+
+  /* Final */
+  h+='<div class="round finals r3">';
+  h+=matchupHTML(finalGame);
+  h+='</div>';
+
+  /* Champion */
+  var champClass=finalWinner?'champion-box has-champ':'champion-box';
+  h+='<div class="'+champClass+'">';
+  h+='<div class="trophy">🏆</div>';
+  h+='<div class="champ-label">Champion</div>';
+  h+='<div class="champ-name">'+(finalWinner?finalWinner.name:'')+'</div>';
+  h+='</div>';
+
+  h+='</div></div></div>';
+
+  document.getElementById('out').innerHTML=h;
+  scaleBracket();
 }
 
-/* ── Init: fetch all games once on load ── */
-fetchAllGames();
+function matchupHTML(m){
+  var decided=(m.scoreA!=null&&m.scoreB!=null);
+  var cls='matchup'+(decided?' decided':'');
+  var aWin=m.winner&&m.winner.name===m.teamA.name;
+  var bWin=m.winner&&m.winner.name===m.teamB.name;
+  var tbd=!m.teamA.seed;
 
-/* ── Iframe auto-resize (cross-origin safe) ── */
-function broadcastHeight(){
-  var h=document.body.scrollHeight;
-  window.parent.postMessage({type:'resize',height:h},'*');
+  var h='<div class="'+cls+'">';
+  h+=teamHTML(m.teamA,m.scoreA,aWin,!m.teamA.seed);
+  h+=teamHTML(m.teamB,m.scoreB,bWin,!m.teamB.seed);
+  h+='</div>';
+  return h;
 }
+
+function teamHTML(team,score,isWinner,isTBD){
+  var cls='team'+(isWinner?' winner':'')+(isTBD?' tbd':'');
+  var seedHtml=team.seed?'<span class="seed">#'+team.seed+'</span>':'';
+  var scoreHtml=(score!=null)?'<span class="score">'+score+'</span>':'';
+  return '<div class="'+cls+'">'+seedHtml+'<span class="name">'+team.name+'</span>'+scoreHtml+'</div>';
+}
+
+renderBracket();
+
+/* ── Scale bracket to fit container without horizontal scroll ── */
+function scaleBracket(){
+  var el=document.getElementById('bracket-scale');
+  if(!el)return;
+  var container=el.parentElement;
+  var containerW=container.clientWidth;
+  var bracketW=760;
+  var scale=Math.min(1,containerW/bracketW);
+  el.style.transform='scale('+scale+')';
+  el.style.transformOrigin='top left';
+  /* Adjust container height to match scaled content */
+  el.parentElement.style.height=(el.scrollHeight*scale)+'px';
+}
+window.addEventListener('resize',function(){scaleBracket();});
+window.addEventListener('load',function(){scaleBracket();});
+
+/* ── Iframe auto-resize ── */
+function broadcastHeight(){window.parent.postMessage({type:'resize',height:document.body.scrollHeight},'*');}
 window.addEventListener('load',broadcastHeight);
 new MutationObserver(broadcastHeight).observe(document.body,{childList:true,subtree:true});
 setInterval(broadcastHeight,500);
